@@ -7,16 +7,19 @@ import { useAuth } from '../contexts/AuthContext';
 import { Product } from '../types';
 import { formatPrice } from '../lib/utils';
 import { Button } from '../components/ui/button';
-import { Trash2, ArrowRight } from 'lucide-react';
+import { Trash2, ArrowRight, Check } from 'lucide-react';
 import { usePaystackPayment } from 'react-paystack';
 
 export function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
-  const { currentUser } = useAuth();
+  const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
   const [productsCache, setProductsCache] = useState<Record<string, Product>>({});
   const [loading, setLoading] = useState(true);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [orderComplete, setOrderComplete] = useState(false);
+  
+  const userName = userProfile?.displayName || currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Customer';
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -142,8 +145,7 @@ export function Cart() {
       });
 
       clearCart();
-      alert('Payment successful and order placed!');
-      navigate('/');
+      setOrderComplete(true);
     } catch (error) {
       console.error('Checkout error', error);
       alert('Payment was successful but failed to place order. Please contact support.');
@@ -178,6 +180,23 @@ export function Cart() {
 
   if (loading && cart.length > 0 && Object.keys(productsCache).length === 0) {
     return <div className="container mx-auto px-4 py-24 text-center">Loading cart...</div>;
+  }
+
+  if (orderComplete) {
+    return (
+      <div className="container mx-auto max-w-xl px-4 py-24 text-center">
+        <div className="bg-green-100 text-green-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Check className="h-12 w-12" />
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight mb-4">Payment Successful!</h1>
+        <p className="text-lg text-zinc-600 mb-8">
+          Thank you, <span className="font-bold text-black">{userName}</span>, for buying from yateteso! Your order has been placed successfully.
+        </p>
+        <Link to="/products">
+          <Button size="lg" className="w-full sm:w-auto">Continue Shopping</Button>
+        </Link>
+      </div>
+    );
   }
 
   if (cart.length === 0) {

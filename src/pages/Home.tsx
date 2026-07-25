@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { ArrowRight, Smartphone, Laptop } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export function Home() {
+  const { currentUser, userProfile } = useAuth();
+  const userName = userProfile?.displayName || currentUser?.displayName || currentUser?.email?.split('@')[0];
+
   return (
     <div className="flex flex-col gap-16 md:gap-24 pb-16">
       {/* Hero Section */}
@@ -10,10 +14,10 @@ export function Home() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550009158-9ebf6d1736eb?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-30"></div>
         <div className="container relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 max-w-4xl">
-            The Future of Electronics is Here.
+            Welcome to yateteso.
           </h1>
           <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mb-10">
-            Discover premium laptops and phones designed for those who demand the best in performance, design, and innovation.
+            Our shop is always open. Discover premium laptops and phones designed for those who demand the best in performance, design, and innovation.
           </p>
           <div className="flex gap-4">
             <Link to="/products">
