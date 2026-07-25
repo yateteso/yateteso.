@@ -16,6 +16,10 @@ import { Signup } from './pages/Signup';
 import { Admin } from './pages/Admin';
 import { Profile } from './pages/Profile';
 import { Contact } from './pages/Contact';
+import { Terms } from './pages/Terms';
+import { Privacy } from './pages/Privacy';
+import { Delivery } from './pages/Delivery';
+import { FAQ } from './pages/FAQ';
 
 export default function App() {
   return (
@@ -33,6 +37,10 @@ export default function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/delivery" element={<Delivery />} />
+              <Route path="/faq" element={<FAQ />} />
             </Routes>
           </Layout>
         </Router>

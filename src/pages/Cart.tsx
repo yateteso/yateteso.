@@ -107,24 +107,36 @@ export function Cart() {
       });
 
       // Submit to Google Apps Script
+      const productNames = cart.map(item => {
+        const product = productsCache[item.productId];
+        return product ? `${product.name} (x${item.quantity})` : 'Unknown Product';
+      }).join(', ');
+
       const payload = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        address: formData.address,
-        city: formData.city,
-        zipCode: formData.zipCode,
-        contact: formData.contact,
-        selectedTotalAmount: totalAmount,
+        'First Name': formData.firstName,
+        'Last Name': formData.lastName,
+        'Email': formData.email,
+        'Street Address': formData.address,
+        'City': formData.city,
+        'ZIP Code': formData.zipCode,
+        'Product Name': productNames,
+        'Total Amount': formatPrice(totalAmount),
+        'Date & Time': new Date().toLocaleString(),
+        'Contact': formData.contact,
       };
 
-      await fetch('https://script.google.com/macros/s/AKfycbxIlJfVo85U4pHp3-vTfaxgpSXB1GsZpZY7SezLkg2pQEM0AxLp8PeB3z9ZXc1-QuA0/exec', {
+      const formBody = new URLSearchParams();
+      Object.entries(payload).forEach(([key, value]) => {
+        formBody.append(key, value);
+      });
+
+      await fetch('https://script.google.com/macros/s/AKfycbyvY8XyQYeRu-zIxHSxkGd4xY3l5bjvwWYZ_qyd-NcpMbvHQ51KgJezingGUPIbjXSU/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify(payload)
+        body: formBody.toString()
       });
 
       clearCart();

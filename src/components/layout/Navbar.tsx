@@ -32,7 +32,7 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link to="/search" className="text-zinc-600 hover:text-zinc-900 transition-colors hidden sm:block">
+            <Link to="/products" className="text-zinc-600 hover:text-zinc-900 transition-colors hidden sm:block">
               <Search className="h-5 w-5" />
             </Link>
             <Link to="/cart" className="relative text-zinc-600 hover:text-zinc-900 transition-colors">

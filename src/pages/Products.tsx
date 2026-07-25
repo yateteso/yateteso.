@@ -14,14 +14,13 @@ export function Products() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState<number>(5000);
+  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
         let q = collection(db, 'products');
-        // We do client-side filtering for search and price to keep it simple,
-        // but we can do category filtering in the query.
         if (categoryFilter) {
           q = query(q, where('category', '==', categoryFilter)) as any;
         }
@@ -43,12 +42,18 @@ export function Products() {
     fetchProducts();
   }, [categoryFilter]);
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPrice = product.price <= priceRange;
-    return matchesSearch && matchesPrice;
-  });
+  const filteredProducts = products
+    .filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesPrice = product.price <= priceRange;
+      return matchesSearch && matchesPrice;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price-asc') return a.price - b.price;
+      if (sortBy === 'price-desc') return b.price - a.price;
+      return 0; // Default
+    });
 
   return (
     <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -56,12 +61,23 @@ export function Products() {
         {/* Filters Sidebar */}
         <div className="w-full md:w-64 space-y-8 flex-shrink-0">
           <div>
-            <h3 className="text-lg font-bold mb-4">Search</h3>
-            <Input 
-              placeholder="Search products..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <h3 className="text-lg font-bold mb-4">Search & Sort</h3>
+            <div className="space-y-4">
+              <Input 
+                placeholder="Search products..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <select 
+                className="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+              >
+                <option value="default">Sort by: Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+              </select>
+            </div>
           </div>
           
           <div>

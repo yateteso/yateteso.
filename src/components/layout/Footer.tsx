@@ -23,15 +23,15 @@ export function Footer() {
             <h4 className="font-semibold mb-4 text-sm">Support</h4>
             <ul className="space-y-2 text-sm text-zinc-500">
               <li><Link to="/contact" className="hover:text-black">Contact Us</Link></li>
-              <li><Link to="#" className="hover:text-black">FAQ</Link></li>
-              <li><Link to="#" className="hover:text-black">Shipping & Returns</Link></li>
+              <li><Link to="/faq" className="hover:text-black">FAQ</Link></li>
+              <li><Link to="/delivery" className="hover:text-black">Delivery</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4 text-sm">Legal</h4>
             <ul className="space-y-2 text-sm text-zinc-500">
-              <li><Link to="#" className="hover:text-black">Terms of Service</Link></li>
-              <li><Link to="#" className="hover:text-black">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="hover:text-black">Terms of Service</Link></li>
+              <li><Link to="/privacy" className="hover:text-black">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
