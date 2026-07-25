@@ -14,7 +14,7 @@ export function Greeting() {
 
   return (
     <div className="bg-zinc-100 text-center py-4 mb-8 rounded-2xl">
-      <p className="text-lg font-medium text-zinc-700">{greeting}, welcome to yateteso!</p>
+      <p className="text-lg font-medium text-zinc-700">{greeting}, welcome to yateteso.!</p>
     </div>
   );
 }

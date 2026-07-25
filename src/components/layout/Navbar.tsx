@@ -20,7 +20,7 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="text-2xl font-bold tracking-tighter">
-              yateteso
+              yateteso.
             </Link>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-600">
               <Link to="/products?category=Phones" className="hover:text-zinc-900 transition-colors">Phones</Link>

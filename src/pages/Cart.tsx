@@ -8,6 +8,7 @@ import { Product } from '../types';
 import { formatPrice } from '../lib/utils';
 import { Button } from '../components/ui/button';
 import { Trash2, ArrowRight } from 'lucide-react';
+import { usePaystackPayment } from 'react-paystack';
 
 export function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -73,23 +74,23 @@ export function Cart() {
     }, 0);
   };
 
-  const handleCheckout = async () => {
-    if (!currentUser) {
-      navigate('/login');
-      return;
-    }
+  const subtotal = calculateSubtotal();
+  const tax = subtotal * 0.08;
+  const totalAmount = subtotal + tax;
 
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.address || !formData.city || !formData.zipCode || !formData.contact) {
-      alert('Please fill in all checkout fields.');
-      return;
-    }
+  const config = {
+    reference: (new Date()).getTime().toString(),
+    email: formData.email || 'customer@example.com',
+    amount: Math.round(totalAmount * 100), // amount in pesewas
+    publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_6622fb1ab34bee45b2891701506108e269b00f91',
+    currency: 'GHS',
+  };
 
-    setCheckingOut(true);
+  const initializePayment = usePaystackPayment(config);
+
+  const onSuccess = async (reference: any) => {
     try {
-      const subtotal = calculateSubtotal();
-      const tax = subtotal * 0.08;
-      const totalAmount = subtotal + tax;
-      
+      setCheckingOut(true);
       const orderItems = cart.map(item => ({
         productId: item.productId,
         quantity: item.quantity,
@@ -99,10 +100,11 @@ export function Cart() {
 
       // Submit to Firebase
       await addDoc(collection(db, 'orders'), {
-        userId: currentUser.uid,
+        userId: currentUser?.uid || 'guest',
         items: orderItems,
         totalAmount,
-        status: 'Pending',
+        status: 'Paid',
+        paymentReference: reference.reference,
         createdAt: new Date().toISOString()
       });
 
@@ -140,14 +142,33 @@ export function Cart() {
       });
 
       clearCart();
-      alert('Order placed successfully!');
+      alert('Payment successful and order placed!');
       navigate('/');
     } catch (error) {
       console.error('Checkout error', error);
-      alert('Failed to place order.');
+      alert('Payment was successful but failed to place order. Please contact support.');
     } finally {
       setCheckingOut(false);
     }
+  };
+
+  const onClose = () => {
+    setCheckingOut(false);
+  };
+
+  const handleCheckout = async () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.address || !formData.city || !formData.zipCode || !formData.contact) {
+      alert('Please fill in all checkout fields.');
+      return;
+    }
+
+    setCheckingOut(true);
+    initializePayment({ onSuccess, onClose } as any);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,10 +191,6 @@ export function Cart() {
       </div>
     );
   }
-
-  const subtotal = calculateSubtotal();
-  const tax = subtotal * 0.08; // 8% dummy tax
-  const total = subtotal + tax;
 
   return (
     <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -344,7 +361,7 @@ export function Cart() {
             <div className="border-t border-zinc-200 pt-6 mb-8">
               <div className="flex justify-between items-center">
                 <span className="font-bold text-lg">Total</span>
-                <span className="font-bold text-2xl">{formatPrice(total)}</span>
+                <span className="font-bold text-2xl">{formatPrice(totalAmount)}</span>
               </div>
             </div>
             
