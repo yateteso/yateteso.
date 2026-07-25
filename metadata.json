@@ -1,0 +1,6 @@
+{
+  "name": "Yateteso Electronics",
+  "description": "A modern, responsive e-commerce website for laptops and phones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
