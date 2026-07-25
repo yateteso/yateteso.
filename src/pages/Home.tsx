@@ -1,11 +1,48 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { ArrowRight, Smartphone, Laptop } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { Product } from '../types';
+import { formatPrice } from '../lib/utils';
 
 export function Home() {
   const { currentUser, userProfile } = useAuth();
   const userName = userProfile?.displayName || currentUser?.displayName || currentUser?.email?.split('@')[0];
+  const [recommended, setRecommended] = useState<Product[]>([]);
+  const [loadingRecommended, setLoadingRecommended] = useState(false);
+
+  useEffect(() => {
+    const fetchRecommended = async () => {
+      try {
+        const recentStr = localStorage.getItem('recentCategories');
+        if (!recentStr) return;
+        const recent: string[] = JSON.parse(recentStr);
+        if (recent.length === 0) return;
+
+        setLoadingRecommended(true);
+        const q = query(
+          collection(db, 'products'),
+          where('category', 'in', recent),
+          limit(4)
+        );
+        const snapshot = await getDocs(q);
+        const products = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Product[];
+        setRecommended(products);
+      } catch (error) {
+        console.error('Error fetching recommended products:', error);
+      } finally {
+        setLoadingRecommended(false);
+      }
+    };
+
+    fetchRecommended();
+  }, []);
 
   return (
     <div className="flex flex-col gap-16 md:gap-24 pb-16">
@@ -33,6 +70,44 @@ export function Home() {
           </div>
         </div>
       </section>
+
+      {/* Recommended Section */}
+      {recommended.length > 0 && (
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold tracking-tight">Recommended for you</h2>
+            <Link to="/products" className="text-sm font-medium hover:underline">
+              View all
+            </Link>
+          </div>
+          {loadingRecommended ? (
+            <div className="flex justify-center py-12">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-black"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {recommended.map(product => (
+                <Link key={product.id} to={`/products/${product.id}`} className="group flex flex-col bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-square bg-zinc-100 p-6 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src={product.imageUrl || 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=400'} 
+                      alt={product.name}
+                      className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">{product.category}</div>
+                    <h3 className="font-bold text-lg mb-2 line-clamp-1">{product.name}</h3>
+                    <div className="mt-auto pt-4 flex items-center justify-between">
+                      <span className="font-medium text-lg">{formatPrice(product.price)}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Categories */}
       <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -36,6 +36,16 @@ export function ProductDetail() {
           const data = { id: docSnap.id, ...docSnap.data() } as Product;
           setProduct(data);
           
+          // Save category to recent categories
+          try {
+            const recentStr = localStorage.getItem('recentCategories');
+            let recent: string[] = recentStr ? JSON.parse(recentStr) : [];
+            recent = [data.category, ...recent.filter(c => c !== data.category)].slice(0, 3);
+            localStorage.setItem('recentCategories', JSON.stringify(recent));
+          } catch (e) {
+            console.error('Error saving recent categories:', e);
+          }
+          
           // Pre-select first option for each variant
           const initialVariants: Record<string, string> = {};
           data.variants?.forEach(v => {
