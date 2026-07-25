@@ -10,11 +10,17 @@ import { Input } from '../components/ui/input';
 export function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category');
+  const initialSearchQuery = searchParams.get('q') || '';
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [priceRange, setPriceRange] = useState<number>(5000);
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
+
+  useEffect(() => {
+    // Also update searchQuery if the URL 'q' changes directly
+    setSearchQuery(searchParams.get('q') || '');
+  }, [searchParams.get('q')]);
 
   useEffect(() => {
     const fetchProducts = async () => {

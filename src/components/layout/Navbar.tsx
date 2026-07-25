@@ -1,17 +1,29 @@
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Menu, Search, LogOut } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { auth } from '../../lib/firebase';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 export function Navbar() {
   const { currentUser, userProfile } = useAuth();
   const { cart } = useCart();
   const cartItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     auth.signOut();
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
   };
 
   return (
@@ -32,10 +44,18 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link to="/products" className="text-zinc-600 hover:text-zinc-900 transition-colors hidden sm:block">
-              <Search className="h-5 w-5" />
-            </Link>
-            <Link to="/cart" className="relative text-zinc-600 hover:text-zinc-900 transition-colors">
+            <form onSubmit={handleSearch} className="hidden sm:flex relative items-center">
+              <Search className="absolute left-3 h-4 w-4 text-zinc-400" />
+              <Input
+                type="search"
+                placeholder="Search products..."
+                className="pl-9 w-48 lg:w-64 h-9 rounded-full bg-zinc-100 border-transparent focus-visible:ring-black focus-visible:bg-white transition-all text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
+            
+            <Link to="/cart" className="relative text-zinc-600 hover:text-zinc-900 transition-colors ml-2">
               <ShoppingCart className="h-5 w-5" />
               {cartItemsCount > 0 && (
                 <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
