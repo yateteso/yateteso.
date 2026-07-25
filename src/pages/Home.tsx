@@ -44,12 +44,19 @@ export function Home() {
     fetchRecommended();
   }, []);
 
+  const isWednesday = new Date().getDay() === 3;
+
   return (
     <div className="flex flex-col gap-16 md:gap-24 pb-16">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-black text-white pt-24 pb-32">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550009158-9ebf6d1736eb?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-30"></div>
         <div className="container relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+          {isWednesday && (
+            <div className="mb-8 inline-flex items-center rounded-full border border-yellow-500/50 bg-yellow-500/20 px-4 py-1.5 text-sm font-medium text-yellow-200 backdrop-blur-md">
+              🎉 It's Wednesday! Enjoy our special mid-week promotions on selected items.
+            </div>
+          )}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 max-w-4xl">
             Welcome to yateteso.
           </h1>
@@ -90,6 +97,7 @@ export function Home() {
                 <Link key={product.id} to={`/products/${product.id}`} className="group flex flex-col bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:shadow-xl transition-all duration-300">
                   <div className="relative aspect-square bg-zinc-100 p-6 flex items-center justify-center overflow-hidden">
                     <img 
+                      referrerPolicy="no-referrer"
                       src={product.imageUrl || 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=400'} 
                       alt={product.name}
                       className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
@@ -117,18 +125,18 @@ export function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Link to="/products?category=Phones" className="group relative overflow-hidden rounded-2xl aspect-[16/9] bg-zinc-100 flex items-center justify-center p-8">
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&q=80" alt="Phones" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&q=80" alt="Phones" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="relative z-20 flex flex-col items-center text-white mt-auto w-full text-left p-6">
               <Smartphone className="h-10 w-10 mb-4" />
-              <h3 className="text-2xl font-bold mb-2">Smartphones</h3>
+              <h3 className="text-2xl font-bold mb-2">iPhones & Samsung</h3>
               <p className="text-zinc-200 mb-4">Capture the moment with pro-grade cameras.</p>
-              <span className="flex items-center text-sm font-medium">Browse Phones <ArrowRight className="ml-2 h-4 w-4" /></span>
+              <span className="flex items-center text-sm font-medium">Browse iPhones & Samsung <ArrowRight className="ml-2 h-4 w-4" /></span>
             </div>
           </Link>
           
           <Link to="/products?category=Laptops" className="group relative overflow-hidden rounded-2xl aspect-[16/9] bg-zinc-100 flex items-center justify-center p-8">
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80" alt="Laptops" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80" alt="Laptops" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="relative z-20 flex flex-col items-center text-white mt-auto w-full text-left p-6">
               <Laptop className="h-10 w-10 mb-4" />
               <h3 className="text-2xl font-bold mb-2">Laptops</h3>
@@ -150,7 +158,7 @@ export function Home() {
                </Link>
             </div>
             <div className="z-10 w-full md:w-1/2 flex justify-center">
-               <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=600" alt="Pro Series" className="rounded-xl shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500 max-w-[250px] md:max-w-md" />
+               <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=600" alt="Pro Series" className="rounded-xl shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500 max-w-[250px] md:max-w-md" />
             </div>
          </div>
       </section>

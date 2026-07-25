@@ -133,6 +133,7 @@ export function ProductDetail() {
         {/* Product Image */}
         <div className="w-full md:w-1/2 bg-zinc-100 rounded-3xl p-12 flex items-center justify-center">
           <img 
+            referrerPolicy="no-referrer"
             src={product.imageUrl || 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=800'} 
             alt={product.name} 
             className="w-full h-auto object-contain mix-blend-multiply drop-shadow-2xl"

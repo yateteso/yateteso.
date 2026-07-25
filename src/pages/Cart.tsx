@@ -78,8 +78,7 @@ export function Cart() {
   };
 
   const subtotal = calculateSubtotal();
-  const tax = subtotal * 0.08;
-  const totalAmount = subtotal + tax;
+  const totalAmount = subtotal;
 
   const config = {
     reference: (new Date()).getTime().toString(),
@@ -370,10 +369,6 @@ export function Cart() {
               <div className="flex justify-between">
                 <span className="text-zinc-500">Shipping</span>
                 <span className="font-medium">Free</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-zinc-500">Estimated Tax</span>
-                <span className="font-medium">{formatPrice(tax)}</span>
               </div>
             </div>
             

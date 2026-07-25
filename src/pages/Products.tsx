@@ -101,7 +101,7 @@ export function Products() {
                 className="w-full justify-start"
                 onClick={() => setSearchParams({ category: 'Phones' })}
               >
-                Phones
+                iPhones & Samsung
               </Button>
               <Button 
                 variant={categoryFilter === 'Laptops' ? 'default' : 'ghost'} 
@@ -165,6 +165,7 @@ export function Products() {
                 <Link key={product.id} to={`/products/${product.id}`} className="group relative bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:shadow-lg transition-all">
                   <div className="aspect-square bg-zinc-100 relative overflow-hidden">
                     <img 
+                      referrerPolicy="no-referrer"
                       src={product.imageUrl || 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=400'} 
                       alt={product.name} 
                       className="absolute inset-0 w-full h-full object-cover p-8 mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
