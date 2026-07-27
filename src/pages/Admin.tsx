@@ -20,7 +20,7 @@ export function Admin() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
-  const [category, setCategory] = useState<'Phones' | 'Laptops' | 'Phone Accessories' | 'Laptop Accessories'>('Phones');
+  const [category, setCategory] = useState<'iPhone' | 'Samsung' | 'Laptops' | 'Phone Accessories' | 'Laptop Accessories'>('iPhone');
   const [imageUrl, setImageUrl] = useState('');
   
   useEffect(() => {
@@ -99,7 +99,7 @@ export function Admin() {
         category,
         imageUrl,
         createdAt: new Date().toISOString(),
-        variants: category === 'Phones' ? [
+        variants: category === 'iPhone' || category === 'Samsung' ? [
           { name: 'Color', options: ['Black', 'White', 'Blue'] },
           { name: 'Storage', options: ['128GB', '256GB', '512GB'] }
         ] : category === 'Laptops' ? [
@@ -136,12 +136,82 @@ export function Admin() {
     }
   };
 
+  const handleExportToSheets = async () => {
+    try {
+      const provider = new (await import('firebase/auth')).GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/drive');
+      provider.addScope('https://www.googleapis.com/auth/spreadsheets');
+      
+      const result = await (await import('firebase/auth')).signInWithPopup(
+        (await import('../lib/firebase')).auth, 
+        provider
+      );
+      
+      const credential = (await import('firebase/auth')).GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      
+      if (!token) throw new Error('Failed to get access token');
+      
+      // Create spreadsheet
+      const createRes = await fetch('https://sheets.googleapis.com/v4/spreadsheets', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          properties: {
+            title: `Products Export - ${new Date().toLocaleDateString()}`
+          }
+        })
+      });
+      
+      if (!createRes.ok) throw new Error('Failed to create spreadsheet');
+      const spreadsheet = await createRes.json();
+      
+      // Populate data
+      const values = [
+        ['ID', 'Name', 'Category', 'Price', 'Stock', 'Description'],
+        ...products.map(p => [
+          p.id, p.name, p.category, p.price, p.stock, p.description
+        ])
+      ];
+      
+      const updateRes = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet.spreadsheetId}/values/Sheet1!A1:F${values.length}?valueInputOption=USER_ENTERED`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          values
+        })
+      });
+      
+      if (!updateRes.ok) throw new Error('Failed to update spreadsheet');
+      
+      alert('Products successfully exported to Google Sheets!');
+      window.open(spreadsheet.spreadsheetUrl, '_blank');
+    } catch (err: any) {
+      console.error('Export failed', err);
+      alert('Failed to export to Google Sheets: ' + err.message);
+    }
+  };
+
   if (authLoading || loading) return <div className="p-12 text-center">Loading admin panel...</div>;
   if (!userProfile?.isAdmin) return null;
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
-      <h1 className="text-3xl font-bold tracking-tight mb-8">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <Button onClick={handleExportToSheets} variant="outline" className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z" />
+          </svg>
+          Export to Sheets
+        </Button>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-1 bg-white p-6 rounded-2xl border border-zinc-200">
@@ -172,7 +242,8 @@ export function Admin() {
                 value={category}
                 onChange={e => setCategory(e.target.value as any)}
               >
-                <option value="Phones">Phones</option>
+                <option value="iPhone">iPhone</option>
+                <option value="Samsung">Samsung</option>
                 <option value="Laptops">Laptops</option>
                 <option value="Phone Accessories">Phone Accessories</option>
                 <option value="Laptop Accessories">Laptop Accessories</option>
