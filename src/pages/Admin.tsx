@@ -49,6 +49,45 @@ export function Admin() {
     fetchProducts();
   }, []);
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setImageUrl(dataUrl);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -140,8 +179,27 @@ export function Admin() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Image URL</label>
-              <Input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://..." />
+              <label className="block text-sm font-medium mb-1">Product Image</label>
+              <div className="flex gap-4 items-center">
+                <Input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  className="flex-1 cursor-pointer"
+                />
+                <span className="text-sm text-zinc-500">or</span>
+                <Input 
+                  value={imageUrl} 
+                  onChange={e => setImageUrl(e.target.value)} 
+                  placeholder="Paste image URL..." 
+                  className="flex-1"
+                />
+              </div>
+              {imageUrl && (
+                <div className="mt-4">
+                  <img src={imageUrl} alt="Preview" className="h-24 w-24 object-cover rounded-xl border border-zinc-200" />
+                </div>
+              )}
             </div>
             
             <Button type="submit" className="w-full mt-4">Add Product</Button>
