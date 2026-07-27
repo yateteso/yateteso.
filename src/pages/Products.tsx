@@ -97,11 +97,18 @@ export function Products() {
                 All Products
               </Button>
               <Button 
-                variant={categoryFilter === 'Phones' ? 'default' : 'ghost'} 
+                variant={categoryFilter === 'iPhone' ? 'default' : 'ghost'} 
                 className="w-full justify-start"
-                onClick={() => setSearchParams({ category: 'Phones' })}
+                onClick={() => setSearchParams({ category: 'iPhone' })}
               >
-                iPhones & Samsung
+                iPhone
+              </Button>
+              <Button 
+                variant={categoryFilter === 'Samsung' ? 'default' : 'ghost'} 
+                className="w-full justify-start"
+                onClick={() => setSearchParams({ category: 'Samsung' })}
+              >
+                Samsung
               </Button>
               <Button 
                 variant={categoryFilter === 'Laptops' ? 'default' : 'ghost'} 

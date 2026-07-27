@@ -35,7 +35,8 @@ export function Navbar() {
               yateteso.
             </Link>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-600">
-              <Link to="/products?category=Phones" className="hover:text-zinc-900 transition-colors">iPhones & Samsung</Link>
+              <Link to="/products?category=iPhone" className="hover:text-zinc-900 transition-colors">iPhone</Link>
+              <Link to="/products?category=Samsung" className="hover:text-zinc-900 transition-colors">Samsung</Link>
               <Link to="/products?category=Laptops" className="hover:text-zinc-900 transition-colors">Laptops</Link>
               <Link to="/products?category=Phone Accessories" className="hover:text-zinc-900 transition-colors">Phone Accessories</Link>
               <Link to="/products?category=Laptop Accessories" className="hover:text-zinc-900 transition-colors">Laptop Accessories</Link>

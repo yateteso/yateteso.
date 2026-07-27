@@ -12,8 +12,9 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-sm">Shop</h4>
             <ul className="space-y-2 text-sm text-zinc-500">
-              <li><Link to="/products?category=Phones" className="hover:text-black">Phones (iPhone, Samsung)</Link></li>
-              <li><Link to="/products?category=Laptops" className="hover:text-black">Laptops (HP, Dell)</Link></li>
+              <li><Link to="/products?category=iPhone" className="hover:text-black">iPhone</Link></li>
+              <li><Link to="/products?category=Samsung" className="hover:text-black">Samsung</Link></li>
+              <li><Link to="/products?category=Laptops" className="hover:text-black">Laptops</Link></li>
               <li><Link to="/products?category=Phone Accessories" className="hover:text-black">Phone Accessories</Link></li>
               <li><Link to="/products?category=Laptop Accessories" className="hover:text-black">Laptop Accessories</Link></li>
               <li><Link to="/products" className="hover:text-black">All Products</Link></li>

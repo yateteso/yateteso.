@@ -122,15 +122,26 @@ export function Home() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold tracking-tight">Shop by Category</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Link to="/products?category=Phones" className="group relative overflow-hidden rounded-2xl aspect-[16/9] bg-zinc-100 flex items-center justify-center p-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <Link to="/products?category=iPhone" className="group relative overflow-hidden rounded-2xl aspect-[16/9] bg-zinc-100 flex items-center justify-center p-8">
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-            <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&q=80" alt="Phones" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80" alt="iPhone" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="relative z-20 flex flex-col items-center text-white mt-auto w-full text-left p-6">
               <Smartphone className="h-10 w-10 mb-4" />
-              <h3 className="text-2xl font-bold mb-2">iPhones & Samsung</h3>
-              <p className="text-zinc-200 mb-4">Capture the moment with pro-grade cameras.</p>
-              <span className="flex items-center text-sm font-medium">Browse iPhones & Samsung <ArrowRight className="ml-2 h-4 w-4" /></span>
+              <h3 className="text-2xl font-bold mb-2">iPhone</h3>
+              <p className="text-zinc-200 mb-4">Experience the latest from Apple.</p>
+              <span className="flex items-center text-sm font-medium">Browse iPhones <ArrowRight className="ml-2 h-4 w-4" /></span>
+            </div>
+          </Link>
+
+          <Link to="/products?category=Samsung" className="group relative overflow-hidden rounded-2xl aspect-[16/9] bg-zinc-100 flex items-center justify-center p-8">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+            <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&q=80" alt="Samsung" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative z-20 flex flex-col items-center text-white mt-auto w-full text-left p-6">
+              <Smartphone className="h-10 w-10 mb-4" />
+              <h3 className="text-2xl font-bold mb-2">Samsung</h3>
+              <p className="text-zinc-200 mb-4">Discover the Galaxy ecosystem.</p>
+              <span className="flex items-center text-sm font-medium">Browse Samsung <ArrowRight className="ml-2 h-4 w-4" /></span>
             </div>
           </Link>
           
