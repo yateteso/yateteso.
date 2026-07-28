@@ -6,7 +6,10 @@ export function Footer() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="text-xl font-bold tracking-tighter mb-4">yateteso.</h3>
+            <h3 className="text-xl font-bold tracking-tighter mb-4 flex items-center gap-2">
+              <img src="/logo.jpg" alt="Yateteso Logo" className="w-6 h-6 rounded-full object-cover" />
+              yateteso.
+            </h3>
             <p className="text-zinc-500 text-sm">Premium electronics for the modern world. Laptops, phones, and more.</p>
           </div>
           <div>
