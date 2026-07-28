@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { PhoneInput } from '../components/ui/PhoneInput';
 import { User } from '../types';
 
 export function Signup() {
@@ -94,12 +95,11 @@ export function Signup() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Phone Number</label>
-              <Input
-                type="tel"
+              <PhoneInput
                 required
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. 0557873784"
+                onChange={setPhone}
+                placeholder="e.g. 055 787 3784"
               />
             </div>
             <div>
