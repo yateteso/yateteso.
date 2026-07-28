@@ -20,6 +20,7 @@ import { Terms } from './pages/Terms';
 import { Privacy } from './pages/Privacy';
 import { Delivery } from './pages/Delivery';
 import { FAQ } from './pages/FAQ';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/contact" element={<Contact />} />
