@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
+import { PhoneInput } from '../components/ui/PhoneInput';
 
 export function ForgotPassword() {
   const [phone, setPhone] = useState('');
@@ -30,12 +30,11 @@ export function ForgotPassword() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Phone Number</label>
-                <Input
-                  type="tel"
+                <PhoneInput
                   required
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. 0557873784"
+                  onChange={setPhone}
+                  placeholder="e.g. 055 787 3784"
                 />
               </div>
             </div>
