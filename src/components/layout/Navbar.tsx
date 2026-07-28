@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ShoppingCart, User, Menu, Search, LogOut } from 'lucide-react';
+import { ShoppingCart, User, Menu, Search, LogOut, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { auth } from '../../lib/firebase';
@@ -36,8 +36,10 @@ export function Navbar() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="text-2xl font-bold tracking-tighter flex items-center gap-2">
-              <img src="/logo.jpg" alt="Yateteso Logo" className="w-8 h-8 rounded-full object-cover" />
+            <Link to="/" className="text-2xl font-bold tracking-tighter flex items-center gap-2 group">
+              <div className="bg-black text-white p-1.5 rounded-lg flex items-center justify-center group-hover:bg-zinc-800 transition-colors">
+                <Zap className="w-5 h-5 fill-current" />
+              </div>
               yateteso.
             </Link>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-600">
