@@ -38,7 +38,14 @@ export function Login() {
 
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in with Google');
+      console.error(err);
+      let errorMessage = 'Failed to sign in with Google';
+      if (err?.code === 'auth/unauthorized-domain' || (err?.message && err.message.includes('auth/unauthorized-domain'))) {
+        errorMessage = 'This domain is not authorized. Please make sure you have added both the dev and shared URLs to the "Authorized domains" list in Firebase Console -> Authentication -> Settings -> Authorized domains (scroll down to the "Authorized domains" section on that page).';
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
