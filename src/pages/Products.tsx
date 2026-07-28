@@ -72,7 +72,17 @@ export function Products() {
               <Input 
                 placeholder="Search products..." 
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchQuery(val);
+                  if (val.trim()) {
+                    setSearchParams({ ...Object.fromEntries(searchParams.entries()), q: val.trim() });
+                  } else {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete('q');
+                    setSearchParams(newParams);
+                  }
+                }}
               />
               <select 
                 className="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"

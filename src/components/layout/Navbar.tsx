@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ShoppingCart, User, Menu, Search, LogOut } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
@@ -11,8 +11,14 @@ export function Navbar() {
   const { currentUser, userProfile } = useAuth();
   const { cart } = useCart();
   const cartItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    setSearchQuery(searchParams.get('q') || '');
+  }, [searchParams.get('q')]);
 
   const handleLogout = () => {
     auth.signOut();
@@ -22,7 +28,6 @@ export function Navbar() {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
     }
   };
 
@@ -52,7 +57,14 @@ export function Navbar() {
                 placeholder="Search products..."
                 className="pl-9 w-48 lg:w-64 h-9 rounded-full bg-zinc-100 border-transparent focus-visible:ring-black focus-visible:bg-white transition-all text-sm"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (e.target.value.trim()) {
+                    navigate(`/products?q=${encodeURIComponent(e.target.value.trim())}`);
+                  } else {
+                    navigate(`/products`);
+                  }
+                }}
               />
             </form>
             
