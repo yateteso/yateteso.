@@ -40,7 +40,7 @@ export function Signup() {
       console.error(err);
       let errorMessage = 'Failed to create an account';
       if (err?.code === 'auth/unauthorized-domain' || (err?.message && err.message.includes('auth/unauthorized-domain'))) {
-        errorMessage = 'This domain is not authorized. Please add EXACTLY these two domains to Firebase Console -> Authentication -> Settings -> Authorized domains: ais-dev-p3svxsemnjhq5chgppkyzx-201775271028.europe-west2.run.app AND ais-pre-p3svxsemnjhq5chgppkyzx-201775271028.europe-west2.run.app (Do not include https://)';
+        errorMessage = 'Domain not authorized. 1) Make sure you added exact domains (ais-dev-p3svxsemnjhq5chgppkyzx-201775271028.europe-west2.run.app and ais-pre-p3svxsemnjhq5chgppkyzx-201775271028.europe-west2.run.app) to Firebase Auth -> Settings -> Authorized Domains. 2) It can take up to 5-10 minutes to take effect. 3) If you are in the AI Studio preview, try opening the app in a new tab using the top-right button.';
       } else if (err?.message) {
         errorMessage = err.message;
       }
