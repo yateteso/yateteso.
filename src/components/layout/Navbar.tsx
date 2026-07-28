@@ -37,7 +37,9 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="text-2xl font-bold tracking-tighter flex items-center gap-2 group">
-              <img src="/pic.jpg" alt="Yateteso Logo" className="w-8 h-8 rounded-full object-cover" />
+              <div className="bg-black text-white p-1.5 rounded-lg flex items-center justify-center group-hover:bg-zinc-800 transition-colors">
+                <Zap className="w-5 h-5 fill-current" />
+              </div>
               yateteso.
             </Link>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-600">
