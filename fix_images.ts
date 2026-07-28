@@ -3,7 +3,7 @@ import { getFirestore, collection, getDocs, updateDoc, doc } from 'firebase/fire
 import firebaseConfig from './firebase-applet-config.json' with { type: 'json' };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || undefined);
+const db = getFirestore(app, (firebaseConfig as any).firestoreDatabaseId || undefined);
 
 async function fix() {
   const snapshot = await getDocs(collection(db, 'products'));

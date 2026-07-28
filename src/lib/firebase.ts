@@ -11,4 +11,4 @@ const app = initializeApp({
 export const auth = getAuth(app);
 export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
-}, firebaseConfig.firestoreDatabaseId || undefined);
+}, (firebaseConfig as any).firestoreDatabaseId || undefined);

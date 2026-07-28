@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, auth } from '../lib/firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Product } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -138,16 +139,13 @@ export function Admin() {
 
   const handleExportToSheets = async () => {
     try {
-      const provider = new (await import('firebase/auth')).GoogleAuthProvider();
+      const provider = new GoogleAuthProvider();
       provider.addScope('https://www.googleapis.com/auth/drive');
       provider.addScope('https://www.googleapis.com/auth/spreadsheets');
       
-      const result = await (await import('firebase/auth')).signInWithPopup(
-        (await import('../lib/firebase')).auth, 
-        provider
-      );
+      const result = await signInWithPopup(auth, provider);
       
-      const credential = (await import('firebase/auth')).GoogleAuthProvider.credentialFromResult(result);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       
       if (!token) throw new Error('Failed to get access token');
