@@ -11,4 +11,4 @@ const app = initializeApp({
 export const auth = getAuth(app);
 export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
-}, (firebaseConfig as any).firestoreDatabaseId || undefined);
+}, (firebaseConfig as any).firestoreDatabaseId || 'ai-studio-yatetesoelectron-fc125f4c-985e-4c99-8ede-f34ce5d967a2');
